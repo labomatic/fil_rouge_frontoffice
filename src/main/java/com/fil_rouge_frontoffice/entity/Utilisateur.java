@@ -1,13 +1,17 @@
 package com.fil_rouge_frontoffice.entity;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
 @Table(name = "utilisateur", schema = "plannings_meteo")
-public class Utilisateur {
+public class Utilisateur implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "id_utilisateur", nullable = false)
@@ -147,8 +151,14 @@ public class Utilisateur {
         this.nom = nom;
     }
 
-    public String getMotDePasse() {
+    @Override
+    public String getPassword() {
         return motDePasse;
+    }
+
+    @Override
+    public String getUsername() {
+        return null;
     }
 
     public void setMotDePasse(String motDePasse) {
@@ -181,5 +191,32 @@ public class Utilisateur {
     }
     public boolean isBasicAdmin(){
         return this.role.getIntitule().equals("admin");
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority(role.getIntitule()));
+        return authorities;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
