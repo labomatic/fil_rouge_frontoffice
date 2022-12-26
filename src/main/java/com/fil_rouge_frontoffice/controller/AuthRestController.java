@@ -17,6 +17,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @CrossOrigin("http://localhost:4200")
@@ -32,7 +33,11 @@ public class AuthRestController {
     private JwtUtils jwtUtils;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody SignupRequest dto) {
+    public ResponseEntity<?> signup(@RequestParam String nom, @RequestParam String prenom,
+                                    @RequestParam String mail, @RequestParam String ville,
+                                    @RequestParam String pays, @RequestParam String password,
+                                    @RequestParam MultipartFile photo) {
+        SignupRequest dto = new SignupRequest(mail, password, prenom, nom, ville, pays, photo);
         try{
             utilisateurService.signup(dto);
             return ResponseEntity.status(HttpStatus.CREATED).build();

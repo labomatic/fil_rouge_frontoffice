@@ -76,7 +76,7 @@ public class Utilisateur implements UserDetails {
         this.role = role;
     }
 
-    public Utilisateur(String nom, String prenom, String mail, String motDePasse,String ville, String pays, Role role, StatutCompte statutCompte) {
+    public Utilisateur(String nom, String prenom, String mail, String motDePasse,String ville, String pays, String photo, Role role, StatutCompte statutCompte) {
         this.prenom = prenom;
         this.mail = mail;
         this.ville = ville;
@@ -85,6 +85,7 @@ public class Utilisateur implements UserDetails {
         this.motDePasse = motDePasse;
         this.statutCompte = statutCompte;
         this.role = role;
+        this.photo = photo;
     }
 
     public List<Evenement> getPlanning() {

@@ -1,5 +1,12 @@
 package com.fil_rouge_frontoffice.controller.dto;
 
+import com.fil_rouge_frontoffice.entity.Role;
+import com.fil_rouge_frontoffice.entity.StatutCompte;
+import com.fil_rouge_frontoffice.entity.Utilisateur;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.multipart.MultipartFile;
+
 public class SignupRequest {
 
     private String prenom;
@@ -12,13 +19,14 @@ public class SignupRequest {
 
     private String pays;
 
-    private String photo;
+    private MultipartFile photo;
 
     private String nom;
 
-    public SignupRequest() {}
+    public SignupRequest() {
+    }
 
-    public SignupRequest(String mail, String password, String prenom, String nom, String ville, String pays, String photo) {
+    public SignupRequest(String mail, String password, String prenom, String nom, String ville, String pays, MultipartFile photo) {
         this.mail = mail;
         this.password = password;
         this.prenom = prenom;
@@ -68,11 +76,11 @@ public class SignupRequest {
         this.pays = pays;
     }
 
-    public String getPhoto() {
+    public MultipartFile getPhoto() {
         return photo;
     }
 
-    public void setPhoto(String photo) {
+    public void setPhoto(MultipartFile photo) {
         this.photo = photo;
     }
 
@@ -83,4 +91,13 @@ public class SignupRequest {
     public void setNom(String nom) {
         this.nom = nom;
     }
+
+    public Utilisateur toUtilisateur() {
+        String photoName = photo.getOriginalFilename();
+        int index = photoName.lastIndexOf(".");
+        String photoExtension = photoName.substring(index);
+
+        return new Utilisateur(nom, prenom, mail, password, ville, pays, mail + photoExtension, null, null);
+    }
 }
+
