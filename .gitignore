@@ -8,6 +8,8 @@ target/
 mvnw
 mvnw.cmd
 
+photos/
+
 ### STS ###
 .apt_generated
 .classpath
