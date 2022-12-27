@@ -24,4 +24,14 @@ public class UtilisateurRestController {
             return ResponseEntity.status(HttpStatus.OK).body(utilisateur);
         }
     }
+
+    @GetMapping("/utilisateur/{mail}")
+    public ResponseEntity<UtilisateurDto> fetchUtilisateurByMail(@PathVariable("mail") String mail) {
+        UtilisateurDto utilisateur = utilisateurService.findByMail(mail);
+        if(utilisateur == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body(utilisateur);
+        }
+    }
 }

@@ -52,6 +52,12 @@ public class UtilisateurService {
         return utilisateurDto;
     }
 
+    public UtilisateurDto findByMail(String mail) {
+        Optional<Utilisateur> utilisateur = utilisateurRepo.findUtilisateurByMail(mail);
+        UtilisateurDto utilisateurDto = UtilisateurDto.from(utilisateur.orElse(null));
+        return utilisateurDto;
+    }
+
     public void signup(SignupRequest dto) throws CompteDejaExistantException {
 
         boolean utilisateurExiste = utilisateurRepo.existsByMail(dto.getMail());
