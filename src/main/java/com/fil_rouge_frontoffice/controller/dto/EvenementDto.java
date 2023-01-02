@@ -1,60 +1,40 @@
-package com.fil_rouge_frontoffice.entity;
+package com.fil_rouge_frontoffice.controller.dto;
 
-import jakarta.persistence.*;
+import com.fil_rouge_frontoffice.entity.Evenement;
+import com.fil_rouge_frontoffice.entity.TypeEvenement;
+import com.fil_rouge_frontoffice.entity.Utilisateur;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "evenement", schema = "plannings_meteo", catalog = "")
-public class Evenement {
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Id
-    @Column(name = "id_evenement", nullable = false)
+public class EvenementDto {
     private Long idEvenement;
-
-    @Column(name = "intitule", nullable = false, length = 50)
     private String intitule;
-
-    @Column(name = "debut", nullable = false)
     private LocalDateTime debut;
-
-    @Column(name = "description", nullable = true, length = 255)
     private String description;
-
-    @Column(name = "lieu", nullable = true, length = 150)
     private String lieu;
-
-    @Column(name = "fin", nullable = true)
     private LocalDateTime fin;
+    private String mailUtilisateur;
 
-    @ManyToOne
-    @JoinColumn(name = "id_proprietaire")
-    private Utilisateur utilisateur;
-
-    @ManyToOne
-    @JoinColumn(name = "id_type_evenement")
-    private TypeEvenement typeEvenement;
-
-    public Evenement() {
+    public EvenementDto() {
     }
 
-    public Evenement(Long idEvenement, String intitule, LocalDateTime debut, String description, String lieu, LocalDateTime fin) {
+    public EvenementDto(Long idEvenement, String intitule, LocalDateTime debut, String description, String lieu, LocalDateTime fin, String mailUtilisateur) {
         this.idEvenement = idEvenement;
         this.intitule = intitule;
         this.debut = debut;
         this.description = description;
         this.lieu = lieu;
         this.fin = fin;
+        this.mailUtilisateur = mailUtilisateur;
     }
 
-    public Evenement(Long idEvenement, String intitule, LocalDateTime debut, String description, String lieu, LocalDateTime fin, Utilisateur utilisateur) {
-        this.idEvenement = idEvenement;
+    public EvenementDto(String intitule, LocalDateTime debut, String description, String lieu, LocalDateTime fin, String mailUtilisateur) {
         this.intitule = intitule;
         this.debut = debut;
         this.description = description;
         this.lieu = lieu;
         this.fin = fin;
-        this.utilisateur = utilisateur;
+        this.mailUtilisateur = mailUtilisateur;
     }
 
     public Long getIdEvenement() {
@@ -105,20 +85,18 @@ public class Evenement {
         this.fin = fin;
     }
 
-    public Utilisateur getUtilisateur() {
-        return utilisateur;
+    public String getMailUtilisateur() {
+        return mailUtilisateur;
     }
 
-    public void setUtilisateur(Utilisateur utilisateur) {
-        this.utilisateur = utilisateur;
+    public void setMailUtilisateur(String mailUtilisateur) {
+        this.mailUtilisateur = mailUtilisateur;
     }
 
-    public TypeEvenement getTypeEvenement() {
-        return typeEvenement;
+    public Evenement toEvenement(){
+        return new Evenement(idEvenement, intitule, debut, description, lieu, fin);
     }
-
-    public void setTypeEvenement(TypeEvenement typeEvenement) {
-        this.typeEvenement = typeEvenement;
+    public static EvenementDto from(Evenement evenement){
+        return new EvenementDto(evenement.getIdEvenement(), evenement.getIntitule(), evenement.getDebut(), evenement.getDescription(), evenement.getLieu(), evenement.getFin(), evenement.getUtilisateur().getMail());
     }
-
 }

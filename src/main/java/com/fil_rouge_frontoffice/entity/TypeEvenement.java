@@ -13,7 +13,7 @@ public class TypeEvenement {
     @Column(name = "id_type_evenement", nullable = false)
     private Long idTypeEvenement;
 
-    @Column(name = "intitule", nullable = false, length = 50)
+    @Column(name = "intitule", unique=true, nullable = false, length = 50)
     private String intitule;
 
     @OneToMany (targetEntity = Evenement.class, mappedBy = "typeEvenement")
