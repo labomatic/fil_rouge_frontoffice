@@ -26,7 +26,7 @@ public class UtilisateurDto {
 
     private String nom;
 
-    private List<Evenement> planning = new ArrayList<>();
+//    private List<Evenement> planning = new ArrayList<>();
 
     public UtilisateurDto() {}
 
@@ -37,7 +37,7 @@ public class UtilisateurDto {
         this.ville = ville;
         this.pays = pays;
         this.nom = nom;
-        this.planning = planning;
+//        this.planning = planning;
         this.photo = photo;
     }
 
@@ -50,7 +50,7 @@ public class UtilisateurDto {
         dto.setVille(u.getVille());
         dto.setPays(u.getPays());
         dto.setPhoto(u.getPhoto());
-        dto.setPlanning(u.getPlanning());
+//        dto.setPlanning(u.getPlanning());
         return dto;
     }
 
@@ -110,11 +110,11 @@ public class UtilisateurDto {
         this.nom = nom;
     }
 
-    public List<Evenement> getPlanning() {
-        return planning;
-    }
+//    public List<Evenement> getPlanning() {
+//        return planning;
+//    }
 
-    public void setPlanning(List<Evenement> planning) {
-        this.planning = planning;
-    }
+//    public void setPlanning(List<Evenement> planning) {
+//        this.planning = planning;
+//    }
 }
