@@ -43,4 +43,15 @@ public class EvenementRestController {
         if(exists) return ResponseEntity.status(HttpStatus.OK).build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<EvenementDto> fetchEvenementById(@PathVariable("id") Long id){
+        Optional<Evenement> evenementOpt = evenementService.findById(id);
+        if(evenementOpt.isPresent()){
+            EvenementDto dto = EvenementDto.from(evenementOpt.get());
+            return ResponseEntity.status(HttpStatus.OK).body(dto);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+
+    }
 }
