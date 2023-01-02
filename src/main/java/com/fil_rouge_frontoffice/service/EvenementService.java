@@ -10,7 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class EvenementService {
@@ -50,5 +53,13 @@ public class EvenementService {
             return true;
         }
         return false;
+    }
+
+    public List<EvenementDto> findUpcomingEvenementsUtilisateur(String mail) {
+        LocalDateTime now = LocalDateTime.now();
+        return evenementRepository.findUpcomingEvenementsUtilisateur(mail, now)
+                .stream()
+                .map(evenement -> EvenementDto.from(evenement))
+                .collect(Collectors.toList());
     }
 }

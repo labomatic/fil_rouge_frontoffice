@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -53,5 +54,11 @@ public class EvenementRestController {
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 
+    }
+
+    @GetMapping("/proprietaire/{mail}")
+    public ResponseEntity<List<EvenementDto>> fetchEvenementsByMail(@PathVariable("mail") String mail) {
+        List<EvenementDto> listeEvenements = evenementService.findUpcomingEvenementsUtilisateur(mail);
+        return ResponseEntity.status(HttpStatus.OK).body(listeEvenements);
     }
 }
