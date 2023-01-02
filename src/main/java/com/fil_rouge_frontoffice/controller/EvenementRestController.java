@@ -35,4 +35,12 @@ public class EvenementRestController {
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
+
+    @PutMapping("/update")
+    public ResponseEntity<HttpStatus> updateEvenement(@RequestBody EvenementDto evenement) {
+
+        boolean exists = evenementService.update(evenement);
+        if(exists) return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
 }

@@ -41,4 +41,14 @@ public class EvenementService {
     public void delete(Long idEvenement) {
         evenementRepository.deleteById(idEvenement);
     }
+    public boolean update(EvenementDto dto){
+        if(evenementRepository.existsByIdEvenement(dto.getIdEvenement())){
+            Evenement evenement = dto.toEvenement();
+            evenement.setTypeEvenement(getTypeGenerique());
+            evenement.setUtilisateur(utilisateurRepository.findUtilisateurByMail(dto.getMailUtilisateur()).get());
+            evenementRepository.save(evenement);
+            return true;
+        }
+        return false;
+    }
 }
