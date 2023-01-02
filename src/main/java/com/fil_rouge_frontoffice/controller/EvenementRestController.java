@@ -2,6 +2,7 @@ package com.fil_rouge_frontoffice.controller;
 
 import com.fil_rouge_frontoffice.controller.dto.EvenementDto;
 
+import com.fil_rouge_frontoffice.entity.Evenement;
 import com.fil_rouge_frontoffice.service.EvenementService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @CrossOrigin("http://localhost:4200")
@@ -23,9 +26,13 @@ public class EvenementRestController {
         EvenementDto evenementDto = evenementService.addEvenement(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(evenementDto);
     }
-    /*@PostMapping("/test")
-    public ResponseEntity<TestDto> test(@RequestBody TestDto dto){
-        System.out.println("test");
-        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
-    }*/
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<HttpStatus> deleteEvenement(@PathVariable("id") Long idEvenement){
+        Optional<Evenement> optEvenement = evenementService.findById(idEvenement);
+        if(optEvenement.isPresent()){
+            evenementService.delete(idEvenement);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
 }

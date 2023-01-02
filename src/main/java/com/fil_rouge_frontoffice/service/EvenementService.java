@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Service
 public class EvenementService {
@@ -29,8 +30,15 @@ public class EvenementService {
         evenementRepository.save(evenement);
         return EvenementDto.from(evenement);
     }
+    public Optional<Evenement> findById(Long id){
+        return evenementRepository.findById(id);
+    }
 
     private TypeEvenement getTypeGenerique(){
         return typeEvenementRepository.findTypeEvenementByIntitule("generique");
+    }
+
+    public void delete(Long idEvenement) {
+        evenementRepository.deleteById(idEvenement);
     }
 }
