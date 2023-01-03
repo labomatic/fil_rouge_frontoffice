@@ -1,9 +1,14 @@
 package com.fil_rouge_frontoffice.repository;
 
+import com.fil_rouge_frontoffice.entity.AvoirDroitsCrudPlanningAutreUtilisateur;
 import com.fil_rouge_frontoffice.entity.Utilisateur;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -13,5 +18,16 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur, Long> 
 
     Optional<Utilisateur> findUtilisateurByMail(String email);
 
+    @Query("select ad from AvoirDroitsCrudPlanningAutreUtilisateur ad where ad.proprietaire.mail = :mailProprietaire and ad.ayantDroit.mail = :mailUtilisateurConnecte and ad.peutLire = true")
+    List<AvoirDroitsCrudPlanningAutreUtilisateur> peutLire(@Param("mailProprietaire") String mailProprietaire, @Param("mailUtilisateurConnecte") String mailUtilisateurConnecte);
+
+    @Query("select ad from AvoirDroitsCrudPlanningAutreUtilisateur ad where ad.proprietaire.mail = :mailProprietaire and ad.ayantDroit.mail = :mailUtilisateurConnecte and ad.peutCreer = true")
+    List<AvoirDroitsCrudPlanningAutreUtilisateur> peutCreer(@Param("mailProprietaire") String mailProprietaire, @Param("mailUtilisateurConnecte") String mailUtilisateurConnecte);
+
+    @Query("select ad from AvoirDroitsCrudPlanningAutreUtilisateur ad where ad.proprietaire.mail = :mailProprietaire and ad.ayantDroit.mail = :mailUtilisateurConnecte and ad.peutModifier = true")
+    List<AvoirDroitsCrudPlanningAutreUtilisateur> peutModifier(@Param("mailProprietaire") String mailProprietaire, @Param("mailUtilisateurConnecte") String mailUtilisateurConnecte);
+
+    @Query("select ad from AvoirDroitsCrudPlanningAutreUtilisateur ad where ad.proprietaire.mail = :mailProprietaire and ad.ayantDroit.mail = :mailUtilisateurConnecte and ad.peutSupprimer = true")
+    List<AvoirDroitsCrudPlanningAutreUtilisateur> peutSupprimer(@Param("mailProprietaire") String mailProprietaire, @Param("mailUtilisateurConnecte") String mailUtilisateurConnecte);
 
 }

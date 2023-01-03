@@ -36,6 +36,9 @@ public class EvenementService {
     public Optional<Evenement> findById(Long id){
         return evenementRepository.findById(id);
     }
+    public boolean existsById(Long id){
+        return evenementRepository.existsByIdEvenement(id);
+    }
 
     private TypeEvenement getTypeGenerique(){
         return typeEvenementRepository.findTypeEvenementByIntitule("generique");
