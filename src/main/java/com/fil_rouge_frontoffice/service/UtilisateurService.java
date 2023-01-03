@@ -24,7 +24,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UtilisateurService {
@@ -104,5 +106,12 @@ public class UtilisateurService {
     }
     public Utilisateur getConnectedUtilisateur(){
         return (Utilisateur) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
+    public List<UtilisateurDto> searchUtilisateurs(String string) {
+        List<Utilisateur> utilisateurs = utilisateurRepo.searchUtilisateursByKeyword(string);
+        return utilisateurs.stream()
+                .map(utilisateur -> UtilisateurDto.from(utilisateur))
+                .collect(Collectors.toList());
     }
 }
