@@ -18,6 +18,9 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur, Long> 
 
     Optional<Utilisateur> findUtilisateurByMail(String email);
 
+    @Query("select u from Utilisateur u where u.mail like :string% or u.nom like :string% or u.prenom like :string%")
+    List<Utilisateur> searchUtilisateursByKeyword(@Param("string") String string);
+
     @Query("select ad from AvoirDroitsCrudPlanningAutreUtilisateur ad where ad.proprietaire.mail = :mailProprietaire and ad.ayantDroit.mail = :mailUtilisateurConnecte and ad.peutLire = true")
     List<AvoirDroitsCrudPlanningAutreUtilisateur> peutLire(@Param("mailProprietaire") String mailProprietaire, @Param("mailUtilisateurConnecte") String mailUtilisateurConnecte);
 
