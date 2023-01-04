@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class SignupRequest {
 
+    private Long id;
     private String prenom;
 
     private String mail;
@@ -34,6 +35,33 @@ public class SignupRequest {
         this.ville = ville;
         this.pays = pays;
         this.photo = photo;
+    }
+    public SignupRequest(Long id, String mail, String password, String prenom, String nom, String ville, String pays, MultipartFile photo) {
+        this.id = id;
+        this.mail = mail;
+        this.password = password;
+        this.prenom = prenom;
+        this.nom = nom;
+        this.ville = ville;
+        this.pays = pays;
+        this.photo = photo;
+    }
+
+    public SignupRequest(Long id, String prenom, String ville, String pays, MultipartFile photo, String nom) {
+        this.id = id;
+        this.prenom = prenom;
+        this.ville = ville;
+        this.pays = pays;
+        this.photo = photo;
+        this.nom = nom;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getPrenom() {
@@ -93,11 +121,13 @@ public class SignupRequest {
     }
 
     public Utilisateur toUtilisateur() {
+        return new Utilisateur(id, nom, prenom, mail, password, ville, pays, genererNomPhoto(), null, null);
+    }
+    public String genererNomPhoto(){
         String photoName = photo.getOriginalFilename();
         int index = photoName.lastIndexOf(".");
         String photoExtension = photoName.substring(index);
-
-        return new Utilisateur(nom, prenom, mail, password, ville, pays, mail + photoExtension, null, null);
+        return mail + photoExtension;
     }
 }
 

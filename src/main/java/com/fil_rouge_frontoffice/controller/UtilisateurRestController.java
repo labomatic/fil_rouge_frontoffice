@@ -1,13 +1,17 @@
 package com.fil_rouge_frontoffice.controller;
 
+import com.fil_rouge_frontoffice.controller.dto.SignupRequest;
 import com.fil_rouge_frontoffice.controller.dto.UtilisateurDto;
+import com.fil_rouge_frontoffice.entity.Utilisateur;
 import com.fil_rouge_frontoffice.service.UtilisateurService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -55,6 +59,23 @@ public class UtilisateurRestController {
         Resource file = utilisateurService.load(filename);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+    }
+
+    @PutMapping("/profil")
+    public ResponseEntity<?> updateProfile(@RequestParam Long idUtilisateur, @RequestParam String nom, @RequestParam String prenom,
+                                           @RequestParam String ville,
+                                           @RequestParam String pays,
+                                           @RequestParam MultipartFile photo){
+        Utilisateur utilisateurConnecte = utilisateurService.getConnectedUtilisateur();
+        if(utilisateurConnecte.getIdUtilisateur() != idUtilisateur){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        SignupRequest dto = new SignupRequest(idUtilisateur, prenom, ville, pays, photo , nom);
+        dto.setMail(utilisateurConnecte.getMail());
+        if(utilisateurService.updateProfil(dto)){
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
 }

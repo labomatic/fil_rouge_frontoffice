@@ -75,6 +75,18 @@ public class Utilisateur implements UserDetails {
         this.statutCompte = statutCompte;
         this.role = role;
     }
+    public Utilisateur(Long id, String nom, String prenom, String mail, String motDePasse,String ville, String pays, String photo, Role role, StatutCompte statutCompte) {
+        this.idUtilisateur = id;
+        this.prenom = prenom;
+        this.mail = mail;
+        this.ville = ville;
+        this.pays = pays;
+        this.nom = nom;
+        this.motDePasse = motDePasse;
+        this.statutCompte = statutCompte;
+        this.role = role;
+        this.photo = photo;
+    }
 
     public Utilisateur(String nom, String prenom, String mail, String motDePasse,String ville, String pays, String photo, Role role, StatutCompte statutCompte) {
         this.prenom = prenom;

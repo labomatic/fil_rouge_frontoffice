@@ -83,6 +83,22 @@ public class UtilisateurService {
             utilisateurRepo.save(utilisateur);
         }
     }
+
+    public boolean updateProfil(SignupRequest dto){
+        boolean utilisateurExiste = utilisateurRepo.existsById(dto.getId());
+        if(utilisateurExiste){
+            storeFile(dto.getPhoto(), dto.getMail());
+            Utilisateur utilisateur = utilisateurRepo.findById(dto.getId()).get();
+            utilisateur.setPrenom(dto.getPrenom());
+            utilisateur.setVille(dto.getVille());
+            utilisateur.setPays(dto.getPays());
+            utilisateur.setNom(dto.getNom());
+            utilisateur.setPhoto(dto.genererNomPhoto());
+            utilisateurRepo.save(utilisateur);
+            return true;
+        }
+        return false;
+    }
     private void setRoleUtilisateur(Utilisateur utilisateur){
         utilisateur.setRole(setRole());
     }
