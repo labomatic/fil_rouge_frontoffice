@@ -6,6 +6,8 @@ import com.fil_rouge_frontoffice.entity.StatutCompte;
 import com.fil_rouge_frontoffice.entity.Utilisateur;
 import jakarta.persistence.*;
 import jdk.jshell.execution.Util;
+import org.springframework.core.io.Resource;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
