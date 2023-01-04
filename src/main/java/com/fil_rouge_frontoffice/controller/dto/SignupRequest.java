@@ -56,6 +56,14 @@ public class SignupRequest {
         this.nom = nom;
     }
 
+    public SignupRequest(Long id, String prenom, String ville, String pays, String nom) {
+        this.id = id;
+        this.prenom = prenom;
+        this.ville = ville;
+        this.pays = pays;
+        this.nom = nom;
+    }
+
     public Long getId() {
         return id;
     }

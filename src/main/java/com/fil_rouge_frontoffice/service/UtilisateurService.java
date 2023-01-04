@@ -87,13 +87,16 @@ public class UtilisateurService {
     public boolean updateProfil(SignupRequest dto){
         boolean utilisateurExiste = utilisateurRepo.existsById(dto.getId());
         if(utilisateurExiste){
-            storeFile(dto.getPhoto(), dto.getMail());
             Utilisateur utilisateur = utilisateurRepo.findById(dto.getId()).get();
+            if(dto.getPhoto() != null && dto.getPhoto().getOriginalFilename().length() > 0){
+                storeFile(dto.getPhoto(), dto.getMail());
+                utilisateur.setPhoto(dto.genererNomPhoto());
+            }
             utilisateur.setPrenom(dto.getPrenom());
             utilisateur.setVille(dto.getVille());
             utilisateur.setPays(dto.getPays());
             utilisateur.setNom(dto.getNom());
-            utilisateur.setPhoto(dto.genererNomPhoto());
+
             utilisateurRepo.save(utilisateur);
             return true;
         }

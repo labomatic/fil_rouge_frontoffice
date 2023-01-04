@@ -77,5 +77,21 @@ public class UtilisateurRestController {
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
+    @PutMapping("/profil-garder-photo")
+    public ResponseEntity<?> updateProfileKeepPhoto(@RequestParam Long idUtilisateur, @RequestParam String nom, @RequestParam String prenom,
+                                           @RequestParam String ville,
+                                           @RequestParam String pays
+                                          ){
+        Utilisateur utilisateurConnecte = utilisateurService.getConnectedUtilisateur();
+        if(utilisateurConnecte.getIdUtilisateur() != idUtilisateur){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        SignupRequest dto = new SignupRequest(idUtilisateur, prenom, ville, pays, nom);
+        dto.setMail(utilisateurConnecte.getMail());
+        if(utilisateurService.updateProfil(dto)){
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
 
 }
