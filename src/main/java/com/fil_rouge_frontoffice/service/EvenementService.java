@@ -65,4 +65,10 @@ public class EvenementService {
                 .map(evenement -> EvenementDto.from(evenement))
                 .collect(Collectors.toList());
     }
+
+    public List<EvenementDto> findEvenementsUtilisateurMensuel(String mail, int annee, int mois) {
+        return evenementRepository.findEvenementsUtilisateurSurUnMois(mail, annee, mois).stream()
+                .map(evenement -> EvenementDto.from(evenement))
+                .collect(Collectors.toList());
+    }
 }

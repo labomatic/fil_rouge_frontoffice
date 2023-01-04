@@ -90,4 +90,11 @@ public class EvenementRestController {
         List<EvenementDto> listeEvenements = evenementService.findUpcomingEvenementsUtilisateur(mail);
         return ResponseEntity.status(HttpStatus.OK).body(listeEvenements);
     }
+
+    @GetMapping("/planning/{mail}/{annee}/{mois}")
+    public ResponseEntity<List<EvenementDto>> fetchEvenementsUtilisateurMois(@PathVariable String mail, @PathVariable int annee, @PathVariable int mois) {
+        List<EvenementDto> listeEvenements = evenementService.findEvenementsUtilisateurMensuel(mail, annee, mois);
+        return ResponseEntity.status(HttpStatus.OK).body(listeEvenements);
+    }
+
 }

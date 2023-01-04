@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -17,4 +18,7 @@ public interface EvenementRepository extends JpaRepository<Evenement, Long> {
 
     @Query("select e from Evenement e where e.utilisateur.mail = :mail and e.debut >= :now order by e.debut asc")
     List<Evenement> findUpcomingEvenementsUtilisateur(@Param("mail") String mail, @Param("now") LocalDateTime now);
+
+    @Query("select e from Evenement e where e.utilisateur.mail = :mail and (year(e.debut) < :annee or (year(e.debut)= :annee and month(e.debut) <= :mois)) and (year(e.fin) > :annee or (year(e.fin) = :annee and month(e.fin) >= :mois)) order by e.debut asc")
+    List<Evenement> findEvenementsUtilisateurSurUnMois(@Param("mail") String mail, @Param("annee") int annee, @Param("mois") int mois);
 }
