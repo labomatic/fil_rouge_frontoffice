@@ -28,6 +28,18 @@ public class AvoirDroitsCrudPlanningAutreUtilisateur {
     @Column(name = "peut_supprimer", nullable = true)
     private Boolean peutSupprimer;
 
+    public AvoirDroitsCrudPlanningAutreUtilisateur() {
+    }
+
+    public AvoirDroitsCrudPlanningAutreUtilisateur(Utilisateur proprietaire, Utilisateur ayantDroit, Boolean peutLire, Boolean peutCreer, Boolean peutModifier, Boolean peutSupprimer) {
+        this.proprietaire = proprietaire;
+        this.ayantDroit = ayantDroit;
+        this.peutLire = peutLire;
+        this.peutCreer = peutCreer;
+        this.peutModifier = peutModifier;
+        this.peutSupprimer = peutSupprimer;
+    }
+
     public Utilisateur getProprietaire() {
         return proprietaire;
     }

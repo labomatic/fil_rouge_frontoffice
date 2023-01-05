@@ -1,5 +1,6 @@
 package com.fil_rouge_frontoffice.service;
 
+import com.fil_rouge_frontoffice.controller.dto.AvoirDroitsCrudPlanningAutreUtilisateurDto;
 import com.fil_rouge_frontoffice.controller.dto.SignupRequest;
 import com.fil_rouge_frontoffice.controller.dto.UtilisateurDto;
 import com.fil_rouge_frontoffice.entity.AvoirDroitsCrudPlanningAutreUtilisateur;
@@ -150,7 +151,9 @@ public class UtilisateurService {
 
     public List<UtilisateurDto> searchUtilisateurs(String string) {
         List<Utilisateur> utilisateurs = utilisateurRepo.searchUtilisateursByKeyword(string);
+        Utilisateur utilisateurConnecte = getConnectedUtilisateur();
         return utilisateurs.stream()
+                .filter(u -> u.getIdUtilisateur() != utilisateurConnecte.getIdUtilisateur())
                 .map(utilisateur -> UtilisateurDto.from(utilisateur))
                 .collect(Collectors.toList());
     }
@@ -170,5 +173,14 @@ public class UtilisateurService {
     public boolean isSuppressionAutorisee(String mailProprietaire, String mailAutre){
         List<AvoirDroitsCrudPlanningAutreUtilisateur> droits = utilisateurRepo.peutSupprimer(mailProprietaire, mailAutre);
         return droits != null && droits.size() > 0;
+    }
+
+    public AvoirDroitsCrudPlanningAutreUtilisateurDto getDroits(String mailProprietaire, String mailAyantDroit) {
+        Optional<AvoirDroitsCrudPlanningAutreUtilisateur> droits = utilisateurRepo.getDroits(mailProprietaire, mailAyantDroit);
+        if(droits.isEmpty()){
+            return new AvoirDroitsCrudPlanningAutreUtilisateurDto(mailProprietaire, mailAyantDroit, false, false, false, false);
+        }
+        AvoirDroitsCrudPlanningAutreUtilisateurDto droitsDto = AvoirDroitsCrudPlanningAutreUtilisateurDto.from(droits.get());
+        return droitsDto;
     }
 }

@@ -1,7 +1,10 @@
 package com.fil_rouge_frontoffice.controller;
 
+import com.fil_rouge_frontoffice.controller.dto.AvoirDroitsCrudPlanningAutreUtilisateurDto;
+import com.fil_rouge_frontoffice.controller.dto.RequeteDroitsDto;
 import com.fil_rouge_frontoffice.controller.dto.SignupRequest;
 import com.fil_rouge_frontoffice.controller.dto.UtilisateurDto;
+import com.fil_rouge_frontoffice.entity.AvoirDroitsCrudPlanningAutreUtilisateur;
 import com.fil_rouge_frontoffice.entity.Utilisateur;
 import com.fil_rouge_frontoffice.service.UtilisateurService;
 import org.apache.coyote.Response;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin("http://localhost:4200")
@@ -92,6 +96,17 @@ public class UtilisateurRestController {
             return ResponseEntity.status(HttpStatus.OK).build();
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+    @PostMapping("/droits")
+    public ResponseEntity<AvoirDroitsCrudPlanningAutreUtilisateurDto> getDroits(@RequestBody RequeteDroitsDto dto)   {
+        String proprietaire = dto.getMailProprietaire();
+        String ayantDroit = dto.getMailAyantDroit();
+        Utilisateur utilisateurConnecte = utilisateurService.getConnectedUtilisateur();
+        if(!utilisateurConnecte.getMail().equals(proprietaire)){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        AvoirDroitsCrudPlanningAutreUtilisateurDto droits = utilisateurService.getDroits(proprietaire, ayantDroit);
+        return ResponseEntity.status(HttpStatus.OK).body(droits);
     }
 
 }

@@ -33,4 +33,6 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur, Long> 
     @Query("select ad from AvoirDroitsCrudPlanningAutreUtilisateur ad where ad.proprietaire.mail = :mailProprietaire and ad.ayantDroit.mail = :mailUtilisateurConnecte and ad.peutSupprimer = true")
     List<AvoirDroitsCrudPlanningAutreUtilisateur> peutSupprimer(@Param("mailProprietaire") String mailProprietaire, @Param("mailUtilisateurConnecte") String mailUtilisateurConnecte);
 
+    @Query("select ad from AvoirDroitsCrudPlanningAutreUtilisateur ad where ad.proprietaire.mail = :mailProprietaire and ad.ayantDroit.mail = :mailAyantDroit")
+    Optional<AvoirDroitsCrudPlanningAutreUtilisateur> getDroits(@Param("mailProprietaire") String mailProprietaire, @Param("mailAyantDroit") String mailAyantDroit);
 }
