@@ -93,6 +93,10 @@ public class EvenementRestController {
 
     @GetMapping("/planning/{mail}/{annee}/{mois}")
     public ResponseEntity<List<EvenementDto>> fetchEvenementsUtilisateurMois(@PathVariable String mail, @PathVariable int annee, @PathVariable int mois) {
+        String mailUtilisateurConnecte = utilisateurService.getConnectedUtilisateur().getMail();
+        if(!mailUtilisateurConnecte.equals(mail)){
+            if(!utilisateurService.isLectureAutorisee(mail, mailUtilisateurConnecte)) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         List<EvenementDto> listeEvenements = evenementService.findEvenementsUtilisateurMensuel(mail, annee, mois);
         return ResponseEntity.status(HttpStatus.OK).body(listeEvenements);
     }
