@@ -6,14 +6,24 @@ import jakarta.persistence.*;
 @Table(name = "avoir_droits_crud_planning_autre_utilisateur", schema = "plannings_meteo")
 public class AvoirDroitsCrudPlanningAutreUtilisateur {
 
+    @EmbeddedId
+    ClePartagePlanning id;
     @ManyToOne
     @JoinColumn(name = "id_proprietaire")
-    @Id
+    @MapsId("idProprietaire")
     private Utilisateur proprietaire;
+
+    public ClePartagePlanning getId() {
+        return id;
+    }
+
+    public void setId(ClePartagePlanning id) {
+        this.id = id;
+    }
 
     @ManyToOne
     @JoinColumn(name = "id_ayant_droit")
-    @Id
+    @MapsId("idAyantDroit")
     private Utilisateur ayantDroit;
 
     @Column(name = "peut_lire", nullable = true)
@@ -38,6 +48,7 @@ public class AvoirDroitsCrudPlanningAutreUtilisateur {
         this.peutCreer = peutCreer;
         this.peutModifier = peutModifier;
         this.peutSupprimer = peutSupprimer;
+        this.id = new ClePartagePlanning(proprietaire.getIdUtilisateur(), ayantDroit.getIdUtilisateur());
     }
 
     public Utilisateur getProprietaire() {

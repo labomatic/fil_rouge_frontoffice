@@ -6,6 +6,7 @@ import com.fil_rouge_frontoffice.controller.dto.SignupRequest;
 import com.fil_rouge_frontoffice.controller.dto.UtilisateurDto;
 import com.fil_rouge_frontoffice.entity.AvoirDroitsCrudPlanningAutreUtilisateur;
 import com.fil_rouge_frontoffice.entity.Utilisateur;
+import com.fil_rouge_frontoffice.service.AvoirDroitsCrudPlanningAutreUtilisateurService;
 import com.fil_rouge_frontoffice.service.UtilisateurService;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,8 @@ public class UtilisateurRestController {
 
     @Autowired
     private UtilisateurService utilisateurService;
+    @Autowired
+    private AvoirDroitsCrudPlanningAutreUtilisateurService adService;
 
     @GetMapping("/profil/{id}")
     public ResponseEntity<UtilisateurDto> fetchUtilisateurById(@PathVariable("id") Long id) {
@@ -107,6 +110,33 @@ public class UtilisateurRestController {
         }
         AvoirDroitsCrudPlanningAutreUtilisateurDto droits = utilisateurService.getDroits(proprietaire, ayantDroit);
         return ResponseEntity.status(HttpStatus.OK).body(droits);
+    }
+    /*@PutMapping("/switch-droit-ecriture")
+    public ResponseEntity<?> switchDroitEcriture(@RequestBody RequeteDroitsDto dto){
+        String proprietaire = dto.getMailProprietaire();
+        String ayantDroit = dto.getMailAyantDroit();
+        Utilisateur utilisateurConnecte = utilisateurService.getConnectedUtilisateur();
+        if(!utilisateurConnecte.getMail().equals(proprietaire)){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        utilisateurService.switchDroitEcriture(proprietaire, ayantDroit);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }*/
+    @PutMapping("/droits")
+    public ResponseEntity<?> updateDroits(@RequestBody AvoirDroitsCrudPlanningAutreUtilisateurDto dto){
+        String mailProprietaire = dto.getMailProprietaire();
+        String mailAyantDroit = dto.getMailAyantDroit();
+        Utilisateur utilisateurConnecte = utilisateurService.getConnectedUtilisateur();
+        if(utilisateurConnecte == null || !utilisateurConnecte.getMail().equals(mailProprietaire)){
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        Utilisateur ayantDroit = utilisateurService.findUtilisateurByMail(mailAyantDroit);
+        if(ayantDroit == null){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        AvoirDroitsCrudPlanningAutreUtilisateur ad = new AvoirDroitsCrudPlanningAutreUtilisateur(utilisateurConnecte, ayantDroit, dto.isPeutLire(), dto.isPeutEcrire(), dto.isPeutModifier(), dto.isPeutSupprimer());
+        adService.saveOrUpdate(ad);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
 }

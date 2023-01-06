@@ -62,6 +62,11 @@ public class UtilisateurService {
         UtilisateurDto utilisateurDto = UtilisateurDto.from(utilisateur.orElse(null));
         return utilisateurDto;
     }
+    public Utilisateur findUtilisateurByMail(String mail){
+        Optional<Utilisateur> utilisateur = utilisateurRepo.findUtilisateurByMail(mail);
+        if(utilisateur.isPresent()) return utilisateur.get();
+        return null;
+    }
 
     public UtilisateurDto findByMail(String mail) {
         Optional<Utilisateur> utilisateur = utilisateurRepo.findUtilisateurByMail(mail);
@@ -182,5 +187,18 @@ public class UtilisateurService {
         }
         AvoirDroitsCrudPlanningAutreUtilisateurDto droitsDto = AvoirDroitsCrudPlanningAutreUtilisateurDto.from(droits.get());
         return droitsDto;
+    }
+
+    public void switchDroitEcriture(String proprietaire, String ayantDroit) {
+        Optional<AvoirDroitsCrudPlanningAutreUtilisateur> droits = utilisateurRepo.findRelation(proprietaire, ayantDroit);
+        boolean existeDejaRelation = droits.isPresent();
+        if(!existeDejaRelation){
+            save(new AvoirDroitsCrudPlanningAutreUtilisateur(utilisateurRepo.findUtilisateurByMail(proprietaire).get(), utilisateurRepo.findUtilisateurByMail(ayantDroit).get(), true, false, false, false));
+        } else{
+            utilisateurRepo.switchDroitLecture(proprietaire, ayantDroit, droits.get().getPeutLire() == true ? false : true);
+        }
+    }
+    public void save(AvoirDroitsCrudPlanningAutreUtilisateur ad){
+        utilisateurRepo.creerRelation(ad.getProprietaire(), ad.getAyantDroit(), ad.getPeutLire() == true ? true : false,  ad.getPeutCreer() == true ? true : false, ad.getPeutModifier() == true ? true: false, ad.getPeutSupprimer() == true ? true: false);
     }
 }

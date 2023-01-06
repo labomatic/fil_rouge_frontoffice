@@ -35,4 +35,11 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur, Long> 
 
     @Query("select ad from AvoirDroitsCrudPlanningAutreUtilisateur ad where ad.proprietaire.mail = :mailProprietaire and ad.ayantDroit.mail = :mailAyantDroit")
     Optional<AvoirDroitsCrudPlanningAutreUtilisateur> getDroits(@Param("mailProprietaire") String mailProprietaire, @Param("mailAyantDroit") String mailAyantDroit);
+
+    @Query("update AvoirDroitsCrudPlanningAutreUtilisateur ad set ad.peutLire = :nouvelleValeur where ad.proprietaire.mail = :mailProprietaire and ad.ayantDroit.mail = :mailAyantDroit")
+    void switchDroitLecture(@Param("mailProprietaire") String mailProprietaire, @Param("mailAyantDroit") String mailAyantDroit, @Param("nouvelleValeur") boolean nouvelleValeur);
+    @Query("select ad from AvoirDroitsCrudPlanningAutreUtilisateur ad where ad.proprietaire.mail = :mailProprietaire and ad.ayantDroit.mail= :mailAyantDroit")
+    Optional<AvoirDroitsCrudPlanningAutreUtilisateur> findRelation(@Param("mailProprietaire") String mailProprietaire, @Param("mailAyantDroit") String mailAyantDroit);
+    @Query(value = "insert into AvoirDroitsCrudPlanningAutreUtilisateur(proprietaire, ayantDroit, peutLire, peutCreer, peutModifier, peutSupprimer) values(:proprietaire, :ayantDroit, :peutLire, :peutEcrire, :peutModifier, :peutSupprimer)", nativeQuery = true)
+    void creerRelation(@Param("proprietaire") Utilisateur proprietaire, @Param("ayantDroit") Utilisateur ayantDroit, @Param("peutLire") boolean peutLire,@Param("peutEcrire") boolean peutEcrire, @Param("peutModifier") boolean peutModifier, @Param("peutSupprimer") boolean peutSupprimer);
 }
