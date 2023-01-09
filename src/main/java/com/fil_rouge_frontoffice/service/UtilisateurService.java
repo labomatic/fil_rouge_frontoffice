@@ -163,22 +163,7 @@ public class UtilisateurService {
                 .collect(Collectors.toList());
     }
 
-    public boolean isLectureAutorisee(String mailProprietaire, String mailAutre){
-        List<AvoirDroitsCrudPlanningAutreUtilisateur> droits = utilisateurRepo.peutLire(mailProprietaire, mailAutre);
-        return droits != null && droits.size() > 0;
-    }
-    public boolean isEcritureAutorisee(String mailProprietaire, String mailAutre){
-        List<AvoirDroitsCrudPlanningAutreUtilisateur> droits = utilisateurRepo.peutCreer(mailProprietaire, mailAutre);
-        return droits != null && droits.size() > 0;
-    }
-    public boolean isModificationAutorisee(String mailProprietaire, String mailAutre){
-        List<AvoirDroitsCrudPlanningAutreUtilisateur> droits = utilisateurRepo.peutModifier(mailProprietaire, mailAutre);
-        return droits != null && droits.size() > 0;
-    }
-    public boolean isSuppressionAutorisee(String mailProprietaire, String mailAutre){
-        List<AvoirDroitsCrudPlanningAutreUtilisateur> droits = utilisateurRepo.peutSupprimer(mailProprietaire, mailAutre);
-        return droits != null && droits.size() > 0;
-    }
+
 
     public AvoirDroitsCrudPlanningAutreUtilisateurDto getDroits(String mailProprietaire, String mailAyantDroit) {
         Optional<AvoirDroitsCrudPlanningAutreUtilisateur> droits = utilisateurRepo.getDroits(mailProprietaire, mailAyantDroit);
@@ -201,4 +186,5 @@ public class UtilisateurService {
     public void save(AvoirDroitsCrudPlanningAutreUtilisateur ad){
         utilisateurRepo.creerRelation(ad.getProprietaire(), ad.getAyantDroit(), ad.getPeutLire() == true ? true : false,  ad.getPeutCreer() == true ? true : false, ad.getPeutModifier() == true ? true: false, ad.getPeutSupprimer() == true ? true: false);
     }
+
 }

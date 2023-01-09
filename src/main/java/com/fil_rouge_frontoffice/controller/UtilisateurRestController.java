@@ -105,23 +105,13 @@ public class UtilisateurRestController {
         String proprietaire = dto.getMailProprietaire();
         String ayantDroit = dto.getMailAyantDroit();
         Utilisateur utilisateurConnecte = utilisateurService.getConnectedUtilisateur();
-        if(!utilisateurConnecte.getMail().equals(proprietaire)){
+        if(!(utilisateurConnecte.getMail().equals(proprietaire) || utilisateurConnecte.getMail().equals(ayantDroit))){
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         AvoirDroitsCrudPlanningAutreUtilisateurDto droits = utilisateurService.getDroits(proprietaire, ayantDroit);
         return ResponseEntity.status(HttpStatus.OK).body(droits);
     }
-    /*@PutMapping("/switch-droit-ecriture")
-    public ResponseEntity<?> switchDroitEcriture(@RequestBody RequeteDroitsDto dto){
-        String proprietaire = dto.getMailProprietaire();
-        String ayantDroit = dto.getMailAyantDroit();
-        Utilisateur utilisateurConnecte = utilisateurService.getConnectedUtilisateur();
-        if(!utilisateurConnecte.getMail().equals(proprietaire)){
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        utilisateurService.switchDroitEcriture(proprietaire, ayantDroit);
-        return ResponseEntity.status(HttpStatus.OK).build();
-    }*/
+
     @PutMapping("/droits")
     public ResponseEntity<?> updateDroits(@RequestBody AvoirDroitsCrudPlanningAutreUtilisateurDto dto){
         String mailProprietaire = dto.getMailProprietaire();

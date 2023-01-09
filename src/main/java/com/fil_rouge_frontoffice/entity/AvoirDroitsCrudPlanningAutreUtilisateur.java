@@ -68,7 +68,7 @@ public class AvoirDroitsCrudPlanningAutreUtilisateur {
     }
 
     public Boolean getPeutLire() {
-        return peutLire;
+        return peutLire != null && peutLire;
     }
 
     public void setPeutLire(Boolean peutLire) {
@@ -76,7 +76,7 @@ public class AvoirDroitsCrudPlanningAutreUtilisateur {
     }
 
     public Boolean getPeutCreer() {
-        return peutCreer;
+        return peutCreer != null && peutCreer;
     }
 
     public void setPeutCreer(Boolean peutCreer) {
@@ -84,7 +84,7 @@ public class AvoirDroitsCrudPlanningAutreUtilisateur {
     }
 
     public Boolean getPeutModifier() {
-        return peutModifier;
+        return peutModifier != null && peutModifier;
     }
 
     public void setPeutModifier(Boolean peutModifier) {
@@ -92,7 +92,7 @@ public class AvoirDroitsCrudPlanningAutreUtilisateur {
     }
 
     public Boolean getPeutSupprimer() {
-        return peutSupprimer;
+        return peutSupprimer != null && peutSupprimer;
     }
 
     public void setPeutSupprimer(Boolean peutSupprimer) {

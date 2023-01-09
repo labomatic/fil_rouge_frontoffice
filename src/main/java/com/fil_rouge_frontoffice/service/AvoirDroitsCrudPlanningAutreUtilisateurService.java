@@ -7,26 +7,37 @@ import com.fil_rouge_frontoffice.repository.AvoirDroitsCrudPlanningAutreUtilisat
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class AvoirDroitsCrudPlanningAutreUtilisateurService {
     @Autowired
     private AvoirDroitsCrudPlanningAutreUtilisateurRepository adRepository;
+    @Autowired
+    private UtilisateurService utilisateurService;
 
-    /*public void updateDroits(AvoirDroitsCrudPlanningAutreUtilisateur ad){
-        ClePartagePlanning cle = new ClePartagePlanning(ad.getProprietaire(), ad.getAyantDroit());
-        boolean droitsExiste = adRepository.existsById(cle);
-        if(droitsExiste){
-            adRepository.save(ad);
-        }
-    }
-    public void save(AvoirDroitsCrudPlanningAutreUtilisateur ad){
-        ClePartagePlanning cle = new ClePartagePlanning(ad.getProprietaire(), ad.getAyantDroit());
-        boolean droitsExiste = adRepository.existsById(cle);
-        if(!droitsExiste){
-            adRepository.save(ad);
-        }
-    }*/
     public void saveOrUpdate(AvoirDroitsCrudPlanningAutreUtilisateur ad){
         adRepository.save(ad);
+    }
+    public boolean isLectureAutorisee(String mailProprietaire, String mailAutre){
+        ClePartagePlanning cle = new ClePartagePlanning(utilisateurService.findUtilisateurByMail(mailProprietaire).getIdUtilisateur(), utilisateurService.findUtilisateurByMail(mailAutre).getIdUtilisateur());
+        Optional<AvoirDroitsCrudPlanningAutreUtilisateur> droits = adRepository.findById(cle);
+        return droits.isPresent() && droits.get().getPeutLire();
+    }
+    public boolean isEcritureAutorisee(String mailProprietaire, String mailAutre){
+        ClePartagePlanning cle = new ClePartagePlanning(utilisateurService.findUtilisateurByMail(mailProprietaire).getIdUtilisateur(), utilisateurService.findUtilisateurByMail(mailAutre).getIdUtilisateur());
+        Optional<AvoirDroitsCrudPlanningAutreUtilisateur> droits = adRepository.findById(cle);
+        return droits.isPresent() && droits.get().getPeutCreer();
+    }
+    public boolean isModificationAutorisee(String mailProprietaire, String mailAutre){
+        ClePartagePlanning cle = new ClePartagePlanning(utilisateurService.findUtilisateurByMail(mailProprietaire).getIdUtilisateur(), utilisateurService.findUtilisateurByMail(mailAutre).getIdUtilisateur());
+        Optional<AvoirDroitsCrudPlanningAutreUtilisateur> droits = adRepository.findById(cle);
+        return droits.isPresent() && droits.get().getPeutModifier();
+    }
+    public boolean isSuppressionAutorisee(String mailProprietaire, String mailAutre){
+        ClePartagePlanning cle = new ClePartagePlanning(utilisateurService.findUtilisateurByMail(mailProprietaire).getIdUtilisateur(), utilisateurService.findUtilisateurByMail(mailAutre).getIdUtilisateur());
+        Optional<AvoirDroitsCrudPlanningAutreUtilisateur> droits = adRepository.findById(cle);
+        return droits.isPresent() && droits.get().getPeutSupprimer();
     }
 }

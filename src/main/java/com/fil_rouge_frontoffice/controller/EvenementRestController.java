@@ -4,6 +4,7 @@ import com.fil_rouge_frontoffice.controller.dto.EvenementDto;
 
 import com.fil_rouge_frontoffice.entity.Evenement;
 import com.fil_rouge_frontoffice.entity.Utilisateur;
+import com.fil_rouge_frontoffice.service.AvoirDroitsCrudPlanningAutreUtilisateurService;
 import com.fil_rouge_frontoffice.service.EvenementService;
 
 import com.fil_rouge_frontoffice.service.UtilisateurService;
@@ -24,12 +25,14 @@ public class EvenementRestController {
     private EvenementService evenementService;
     @Autowired
     private UtilisateurService utilisateurService;
+    @Autowired
+    private AvoirDroitsCrudPlanningAutreUtilisateurService adService;
 
     @PostMapping("/add")
     public ResponseEntity<EvenementDto> addEvenement(@RequestBody EvenementDto dto){
         Utilisateur utilisateurConnecte = utilisateurService.getConnectedUtilisateur();
         if(!utilisateurConnecte.getMail().equals(dto.getMailUtilisateur())){
-            if(!utilisateurService.isEcritureAutorisee(dto.getMailUtilisateur(), utilisateurConnecte.getMail())) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            if(!adService.isEcritureAutorisee(dto.getMailUtilisateur(), utilisateurConnecte.getMail())) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         EvenementDto evenementDto = evenementService.addEvenement(dto);
         return ResponseEntity.status(HttpStatus.CREATED).body(evenementDto);
@@ -41,7 +44,7 @@ public class EvenementRestController {
             Utilisateur utilisateurConnecte = utilisateurService.getConnectedUtilisateur();
             Utilisateur proprietaire = optEvenement.get().getUtilisateur();
             if(!utilisateurConnecte.getMail().equals(proprietaire.getMail())){
-                if(!utilisateurService.isSuppressionAutorisee(proprietaire.getMail(), utilisateurConnecte.getMail())) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+                if(!adService.isSuppressionAutorisee(proprietaire.getMail(), utilisateurConnecte.getMail())) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
             evenementService.delete(idEvenement);
             return ResponseEntity.status(HttpStatus.OK).build();
@@ -57,7 +60,7 @@ public class EvenementRestController {
             Utilisateur utilisateurConnecte = utilisateurService.getConnectedUtilisateur();
             Utilisateur proprietaire = evenementService.findById(evenement.getIdEvenement()).get().getUtilisateur();
             if(!utilisateurConnecte.getMail().equals(proprietaire.getMail())){
-                if(!utilisateurService.isModificationAutorisee(proprietaire.getMail(), utilisateurConnecte.getMail())) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+                if(!adService.isModificationAutorisee(proprietaire.getMail(), utilisateurConnecte.getMail())) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
             evenementService.update(evenement);
             return ResponseEntity.status(HttpStatus.OK).build();
@@ -72,7 +75,7 @@ public class EvenementRestController {
             Utilisateur utilisateurConnecte = utilisateurService.getConnectedUtilisateur();
             Utilisateur proprietaire = evenementOpt.get().getUtilisateur();
             if(!utilisateurConnecte.getMail().equals(proprietaire.getMail())){
-                if(!utilisateurService.isLectureAutorisee(proprietaire.getMail(), utilisateurConnecte.getMail())) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+                if(!adService.isLectureAutorisee(proprietaire.getMail(), utilisateurConnecte.getMail())) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
             }
             EvenementDto dto = EvenementDto.from(evenementOpt.get());
             return ResponseEntity.status(HttpStatus.OK).body(dto);
@@ -85,7 +88,7 @@ public class EvenementRestController {
     public ResponseEntity<List<EvenementDto>> fetchEvenementsByMail(@PathVariable("mail") String mail) {
         String mailUtilisateurConnecte = utilisateurService.getConnectedUtilisateur().getMail();
         if(!mailUtilisateurConnecte.equals(mail)){
-            if(!utilisateurService.isLectureAutorisee(mail, mailUtilisateurConnecte)) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            if(!adService.isLectureAutorisee(mail, mailUtilisateurConnecte)) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         List<EvenementDto> listeEvenements = evenementService.findUpcomingEvenementsUtilisateur(mail);
         return ResponseEntity.status(HttpStatus.OK).body(listeEvenements);
@@ -95,7 +98,7 @@ public class EvenementRestController {
     public ResponseEntity<List<EvenementDto>> fetchEvenementsUtilisateurMois(@PathVariable String mail, @PathVariable int annee, @PathVariable int mois) {
         String mailUtilisateurConnecte = utilisateurService.getConnectedUtilisateur().getMail();
         if(!mailUtilisateurConnecte.equals(mail)){
-            if(!utilisateurService.isLectureAutorisee(mail, mailUtilisateurConnecte)) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            if(!adService.isLectureAutorisee(mail, mailUtilisateurConnecte)) return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
         List<EvenementDto> listeEvenements = evenementService.findEvenementsUtilisateurMensuel(mail, annee, mois);
         return ResponseEntity.status(HttpStatus.OK).body(listeEvenements);
