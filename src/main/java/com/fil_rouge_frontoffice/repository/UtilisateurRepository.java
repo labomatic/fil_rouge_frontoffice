@@ -18,6 +18,7 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur, Long> 
 
     Optional<Utilisateur> findUtilisateurByMail(String email);
 
+
     @Query("select u from Utilisateur u where u.mail like :string% or u.nom like :string% or u.prenom like :string%")
     List<Utilisateur> searchUtilisateursByKeyword(@Param("string") String string);
 

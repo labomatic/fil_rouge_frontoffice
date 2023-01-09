@@ -6,6 +6,7 @@ import com.fil_rouge_frontoffice.controller.dto.SignupRequest;
 import com.fil_rouge_frontoffice.controller.dto.UtilisateurDto;
 import com.fil_rouge_frontoffice.entity.AvoirDroitsCrudPlanningAutreUtilisateur;
 import com.fil_rouge_frontoffice.entity.Utilisateur;
+import com.fil_rouge_frontoffice.exception.UtilisateurNotFoundException;
 import com.fil_rouge_frontoffice.service.AvoirDroitsCrudPlanningAutreUtilisateurService;
 import com.fil_rouge_frontoffice.service.UtilisateurService;
 import org.apache.coyote.Response;
@@ -127,6 +128,17 @@ public class UtilisateurRestController {
         AvoirDroitsCrudPlanningAutreUtilisateur ad = new AvoirDroitsCrudPlanningAutreUtilisateur(utilisateurConnecte, ayantDroit, dto.isPeutLire(), dto.isPeutEcrire(), dto.isPeutModifier(), dto.isPeutSupprimer());
         adService.saveOrUpdate(ad);
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @DeleteMapping("/utilisateur/{id}")
+    public ResponseEntity<HttpStatus> deleteUtilisateur(@PathVariable("id") Long id) {
+        try {
+            utilisateurService.deleteUtilisateurById(id);
+            return ResponseEntity.status(HttpStatus.OK).build();
+        } catch (UtilisateurNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
     }
 
 }
