@@ -43,4 +43,5 @@ public interface UtilisateurRepository extends JpaRepository<Utilisateur, Long> 
     Optional<AvoirDroitsCrudPlanningAutreUtilisateur> findRelation(@Param("mailProprietaire") String mailProprietaire, @Param("mailAyantDroit") String mailAyantDroit);
     @Query(value = "insert into AvoirDroitsCrudPlanningAutreUtilisateur(proprietaire, ayantDroit, peutLire, peutCreer, peutModifier, peutSupprimer) values(:proprietaire, :ayantDroit, :peutLire, :peutEcrire, :peutModifier, :peutSupprimer)", nativeQuery = true)
     void creerRelation(@Param("proprietaire") Utilisateur proprietaire, @Param("ayantDroit") Utilisateur ayantDroit, @Param("peutLire") boolean peutLire,@Param("peutEcrire") boolean peutEcrire, @Param("peutModifier") boolean peutModifier, @Param("peutSupprimer") boolean peutSupprimer);
+
 }

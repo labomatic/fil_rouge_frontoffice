@@ -3,13 +3,11 @@ package com.fil_rouge_frontoffice.service;
 import com.fil_rouge_frontoffice.controller.dto.AvoirDroitsCrudPlanningAutreUtilisateurDto;
 import com.fil_rouge_frontoffice.controller.dto.SignupRequest;
 import com.fil_rouge_frontoffice.controller.dto.UtilisateurDto;
-import com.fil_rouge_frontoffice.entity.AvoirDroitsCrudPlanningAutreUtilisateur;
-import com.fil_rouge_frontoffice.entity.Role;
-import com.fil_rouge_frontoffice.entity.StatutCompte;
-import com.fil_rouge_frontoffice.entity.Utilisateur;
+import com.fil_rouge_frontoffice.entity.*;
 import com.fil_rouge_frontoffice.exception.CompteDejaExistantException;
 import com.fil_rouge_frontoffice.exception.UtilisateurNotFoundException;
 import com.fil_rouge_frontoffice.properties.FileStorageProperties;
+import com.fil_rouge_frontoffice.repository.AvoirDroitsCrudPlanningAutreUtilisateurRepository;
 import com.fil_rouge_frontoffice.repository.RoleRepository;
 import com.fil_rouge_frontoffice.repository.StatutCompteRepository;
 import com.fil_rouge_frontoffice.repository.UtilisateurRepository;
@@ -51,6 +49,9 @@ public class UtilisateurService {
 
     @Autowired
     private StatutCompteRepository statutCompteRepo;
+
+    @Autowired
+    private AvoirDroitsCrudPlanningAutreUtilisateurRepository adRepo;
 
     @Autowired
     private PasswordEncoder encoder;
@@ -187,6 +188,7 @@ public class UtilisateurService {
     public void save(AvoirDroitsCrudPlanningAutreUtilisateur ad){
         utilisateurRepo.creerRelation(ad.getProprietaire(), ad.getAyantDroit(), ad.getPeutLire() == true ? true : false,  ad.getPeutCreer() == true ? true : false, ad.getPeutModifier() == true ? true: false, ad.getPeutSupprimer() == true ? true: false);
     }
+
 
     public void deleteUtilisateurById(Long idUtilisateur) throws UtilisateurNotFoundException {
         Optional<Utilisateur> utilisateur = utilisateurRepo.findById(idUtilisateur);

@@ -3,6 +3,7 @@ package com.fil_rouge_frontoffice.service;
 import com.fil_rouge_frontoffice.controller.dto.AvoirDroitsCrudPlanningAutreUtilisateurDto;
 import com.fil_rouge_frontoffice.entity.AvoirDroitsCrudPlanningAutreUtilisateur;
 import com.fil_rouge_frontoffice.entity.ClePartagePlanning;
+import com.fil_rouge_frontoffice.entity.Utilisateur;
 import com.fil_rouge_frontoffice.repository.AvoirDroitsCrudPlanningAutreUtilisateurRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,5 +40,10 @@ public class AvoirDroitsCrudPlanningAutreUtilisateurService {
         ClePartagePlanning cle = new ClePartagePlanning(utilisateurService.findUtilisateurByMail(mailProprietaire).getIdUtilisateur(), utilisateurService.findUtilisateurByMail(mailAutre).getIdUtilisateur());
         Optional<AvoirDroitsCrudPlanningAutreUtilisateur> droits = adRepository.findById(cle);
         return droits.isPresent() && droits.get().getPeutSupprimer();
+    }
+
+    public void supprimerRelations(Utilisateur utilisateur) {
+        List<AvoirDroitsCrudPlanningAutreUtilisateur> liste = adRepository.findAvoirDroitsCrudPlanningAutreUtilisateursByAyantDroitOrProprietaire(utilisateur, utilisateur);
+        adRepository.deleteAll(liste);
     }
 }

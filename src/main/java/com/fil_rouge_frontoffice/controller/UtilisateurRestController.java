@@ -7,6 +7,7 @@ import com.fil_rouge_frontoffice.controller.dto.UtilisateurDto;
 import com.fil_rouge_frontoffice.entity.AvoirDroitsCrudPlanningAutreUtilisateur;
 import com.fil_rouge_frontoffice.entity.Utilisateur;
 import com.fil_rouge_frontoffice.exception.UtilisateurNotFoundException;
+import com.fil_rouge_frontoffice.repository.UtilisateurRepository;
 import com.fil_rouge_frontoffice.service.AvoirDroitsCrudPlanningAutreUtilisateurService;
 import com.fil_rouge_frontoffice.service.UtilisateurService;
 import org.apache.coyote.Response;
@@ -30,6 +31,9 @@ public class UtilisateurRestController {
     private UtilisateurService utilisateurService;
     @Autowired
     private AvoirDroitsCrudPlanningAutreUtilisateurService adService;
+
+    @Autowired
+    private UtilisateurRepository utilisateurRepo;
 
     @GetMapping("/profil/{id}")
     public ResponseEntity<UtilisateurDto> fetchUtilisateurById(@PathVariable("id") Long id) {
@@ -133,12 +137,22 @@ public class UtilisateurRestController {
     @DeleteMapping("/utilisateur/{id}")
     public ResponseEntity<HttpStatus> deleteUtilisateur(@PathVariable("id") Long id) {
         try {
+            Utilisateur utilisateurConnecte = utilisateurService.getConnectedUtilisateur();
+            if(utilisateurConnecte == null || !utilisateurConnecte.getIdUtilisateur().equals(id)){
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            }
+
+            Optional<Utilisateur> utilisateur = utilisateurRepo.findById(id);
+            if(utilisateur.isEmpty()) {
+                throw new UtilisateurNotFoundException();
+            }
+
+            adService.supprimerRelations(utilisateur.get());
             utilisateurService.deleteUtilisateurById(id);
             return ResponseEntity.status(HttpStatus.OK).build();
         } catch (UtilisateurNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-
     }
 
 }
