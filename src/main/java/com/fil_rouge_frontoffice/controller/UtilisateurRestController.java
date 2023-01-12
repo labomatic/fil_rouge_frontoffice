@@ -47,11 +47,12 @@ public class UtilisateurRestController {
 
     @GetMapping("/utilisateur/{mail}")
     public ResponseEntity<UtilisateurDto> fetchUtilisateurByMail(@PathVariable("mail") String mail) {
-        UtilisateurDto utilisateur = utilisateurService.findByMail(mail);
-        if(utilisateur == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        } else {
+        UtilisateurDto utilisateur = null;
+        try {
+            utilisateur = utilisateurService.findByMail(mail);
             return ResponseEntity.status(HttpStatus.OK).body(utilisateur);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 

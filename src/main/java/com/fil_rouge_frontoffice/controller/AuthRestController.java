@@ -42,7 +42,7 @@ public class AuthRestController {
             utilisateurService.signup(dto);
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } catch (CompteDejaExistantException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(e);
         }
     }
 

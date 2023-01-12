@@ -71,7 +71,12 @@ public class UtilisateurService {
     }
 
     public UtilisateurDto findByMail(String mail) {
-        Optional<Utilisateur> utilisateur = utilisateurRepo.findUtilisateurByMail(mail);
+        Optional<Utilisateur> utilisateur = null;
+        try {
+            utilisateur = utilisateurRepo.findUtilisateurByMail(mail);
+        } catch (Exception e) {
+            throw new NullPointerException();
+        }
         UtilisateurDto utilisateurDto = UtilisateurDto.from(utilisateur.orElse(null));
         return utilisateurDto;
     }
@@ -124,7 +129,7 @@ public class UtilisateurService {
         return statutCompteRepo.findStatutCompteByIntitule("actif");
     }
 
-    private void storeFile(MultipartFile file, String fileName) {
+    public void storeFile(MultipartFile file, String fileName) {
 
         String photoName = file.getOriginalFilename();
         int index = photoName.lastIndexOf(".");
